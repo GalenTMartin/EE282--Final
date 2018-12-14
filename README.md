@@ -185,3 +185,9 @@ My final output is found in the file "mCHHislands.txt," which contains two colum
 
 As mentioned previously, this turned out to not be the method by which we'll end up identifying these islands, so I never went through the process of associating them with genes. In principle, one could do this by using BEDtools and looking for overlap between the regions identified here and ~1 kb regions before and after genes in the annotation .gff files.
 
+### References
+Gent, J.I., Ellis, N.A., Guo, L., Harkess, A.E., Yao, Y., Zhang, X., and Dawe, R.K. (2013). CHH islands: de novo DNA methylation in near-gene chromatin regulation in maize. Genome Res. 23, 628–637.
+
+Li, Q., Gent, J.I., Zynda, G., Song, J., Makarevitch, I., Hirsch, C.D., Hirsch, C.N., Dawe, R.K., Madzima, T.F., McGinnis, K.M., et al. (2015). RNA-directed DNA methylation enforces boundaries between heterochromatin and euchromatin in the maize genome. Proc. Natl. Acad. Sci. U.S.A. 112, 14728–14733.
+
+Niederhuth, C.E., Bewick, A.J., Ji, L., Alabady, M.S., Kim, K.D., Li, Q., Rohr, N.A., Rambani, A., Burke, J.M., Udall, J.A., et al. (2016). Widespread natural variation of DNA methylation within angiosperms. Genome Biol. 17, 194.
