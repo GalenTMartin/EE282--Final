@@ -106,12 +106,32 @@ br <- seq(0,307039400,by=100)
 #The hist() function finds the number of CHHs within each of the 100 bp tiles
 freq <- hist(CHHvec, breaks = br, include.lowest = TRUE, plot = FALSE)
 imp <- cbind(freq[[1]],freq[[2]])
-colnames(imp) <- c("interval", "count")
+#colnames(imp) <- c("interval", "count")
 imp
 
 #I chose to save output as a df because I found that it makes import back into R easier later on. 
 ```
+I used a similar R script to bin the mCHH data:
+```
+#!/usr/bin/env Rscript
+args <- commandArgs(trailingOnly = TRUE)
+sink(file = "/dfs1/bio/galentm/CHHislands/data/processed/P25_chr1_mCHH_binned.txt")
+setwd("/dfs1/bio/galentm/CHHislands/data/processed")
+options(max.print=999999999)
 
+CHH <- read.table("P25_chr1_mCHH.txt", header = FALSE)
+CHHvec <- CHH[[1]]
 
+br <- seq(0,307039400,by=100)
+freq <- hist(CHHvec, breaks = br, include.lowest = TRUE, plot = FALSE)
+imp <- cbind(freq[[1]],freq[[2]])
+#colnames(imp) <- c("interval", "count")
+imp
+```
+Next, I manipulated the data in the terminal to get the R outputs from above to be simple lists of frequencies:
+```
+awk ' { print $3 } ' P25_chr1_CHH_binned.txt > P25_chr1_justCHHfreqs.txt
+awk ' { print $3 } ' P25_chr1_mCHH_binned.txt > P25_chr1_justmCHHfreqs.txt
+```
 
   
