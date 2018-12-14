@@ -165,9 +165,10 @@ To find mCHH islands, I used the bash terminal:
 ```
 awk ' { print $2, $3 } ' P25_chr1_CHHpercents_R.txt \
 | grep ^[^m] \
+| grep -v NaN \
 | awk ' $2 > 0.25 { print } ' > mCHHislands.txt
 ```
 My final output is found in the file "mCHHislands.txt," which contains two columns. One lists starting position of the 100 bp tile in question, and the other contains % mCHH
 
-
+As mentioned previously, this turned out to not be the method by which we'll end up identifying these islands, so I never went through the process of actually associating them with genes. In principle, one could do this by using BEDtools and looking for overlap between the regions identified here and ~1 kb regions before and after genes in the annotation .gff files.
 
