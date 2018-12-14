@@ -42,7 +42,7 @@ chr  pos  strand  mC  umC  context  sequence  p.value               p.adjust
 1    222  +       2   4    CHG      CAG       0.00174650251359567   0.0397254180690472
 ...
 ```
-###Step 1: separating CHH cytosines into chromosomes
+### Step 1: separating CHH cytosines into chromosomes
 First, I turned full C and mC files into files with Cs in CHH context and mCs in CHH context using grep:
 ```
 cd /bio/galentm/CHHislands/data/processed/
@@ -82,11 +82,13 @@ awk '{if ($1 == "10") print $2;}' P25_mCHH.txt > /bio/galentm/CHHislands/data/pr
 ```
 From here on, I'll focus on chromosome 1 so that I don't have to write things 10 times.
 
-###Step 2: breaking chromosomes into 100 bp tiles, and finding mCHH frequency within those tiles
+### Step 2: breaking chromosomes into 100 bp tiles, and finding mCHH frequency within those tiles
 For the next part, I passed the data into R and used the hist() function to find frequencies of non-menthylated and mCHHs within 100 bp tiles:
 ```
 #!/usr/bin/env Rscript
 args <- commandArgs(trailingOnly = TRUE)
+
+#sink() creates file from output
 sink(file = "/dfs1/bio/galentm/CHHislands/data/processed/chr1/P25_chr1_CHH_binned.txt")
 setwd("/dfs1/bio/galentm/CHHislands/data/processed/chr1/")
 
@@ -133,5 +135,39 @@ Next, I manipulated the data in the terminal to get the R outputs from above to 
 awk ' { print $3 } ' P25_chr1_CHH_binned.txt > P25_chr1_justCHHfreqs.txt
 awk ' { print $3 } ' P25_chr1_mCHH_binned.txt > P25_chr1_justmCHHfreqs.txt
 ```
+To get percentages of mCHH in each 100 bp tile, I divided the mCHH frequencies by CHH frequencies in R:
+```
+#!/usr/bin/env Rscript
+args <- commandArgs(trailingOnly = TRUE)
 
-  
+#sink() creates file from output
+sink(file = "/dfs1/bio/galentm/CHHislands/data/processed/chr1/P25_chr1_CHHpercents_R.txt")
+setwd("/dfs1/bio/galentm/CHHislands/data/processed/chr1")
+options(max.print=999999999)
+
+CHH <- read.table("P25_chr1_justCHHfreqs.txt", header = FALSE)
+mCHH <- read.table("P25_chr1_justmCHHfreqs.txt", header = FALSE)
+
+#data as vectors
+CHHvec <- CHH[[1]]
+mCHHvec <- mCHH[[1]]
+
+mCHHpercents <- mCHHvec/CHHvec
+#mCHHpercents <- as.data.frame(mCHHpercents)
+#mCHHpercents
+br <- seq(0,307039400,by=100)+1
+
+#creates final file with two columns, one with start position of tile/bin and one with mCHH percent
+final <- cbind(br,mCHHpercents)
+final
+```
+To find mCHH islands, I used the bash terminal:
+```
+awk ' { print $2, $3 } ' P25_chr1_CHHpercents_R.txt \
+| grep ^[^m] \
+| awk ' $2 > 0.25 { print } ' > mCHHislands.txt
+```
+My final output is found in the file "mCHHislands.txt," which contains two columns. One lists starting position of the 100 bp tile in question, and the other contains % mCHH
+
+
+
