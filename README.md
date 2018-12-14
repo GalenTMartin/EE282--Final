@@ -168,7 +168,20 @@ awk ' { print $2, $3 } ' P25_chr1_CHHpercents_R.txt \
 | grep -v NaN \
 | awk ' $2 > 0.25 { print } ' > mCHHislands.txt
 ```
-My final output is found in the file "mCHHislands.txt," which contains two columns. One lists starting position of the 100 bp tile in question, and the other contains % mCHH
+My final output is found in the file "mCHHislands.txt," which contains two columns. One lists starting position of the 100 bp tile in question, and the other contains % mCHH:
+```
+[galentm@compute-7-2 chr1]$ head mCHHislands.txt
+7001 0.31578947
+7301 0.28571429
+7401 0.30000000
+15801 0.35135135
+15901 0.44827586
+16001 0.37209302
+16101 0.29629630
+16201 0.35897436
+16401 0.56756757
+16501 0.33333333
+```
 
-As mentioned previously, this turned out to not be the method by which we'll end up identifying these islands, so I never went through the process of actually associating them with genes. In principle, one could do this by using BEDtools and looking for overlap between the regions identified here and ~1 kb regions before and after genes in the annotation .gff files.
+As mentioned previously, this turned out to not be the method by which we'll end up identifying these islands, so I never went through the process of associating them with genes. In principle, one could do this by using BEDtools and looking for overlap between the regions identified here and ~1 kb regions before and after genes in the annotation .gff files.
 
